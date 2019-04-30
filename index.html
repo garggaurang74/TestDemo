@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>MassBuildTool</title>
+    <!-- Font Awesome -->
+    <link href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{{ url_for('static', filename='css/mdb.min.css') }}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{{ url_for('static', filename='css/style.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body class="grey lighten-3">
+<!--Main Navigation-->
+<header>
+    <!-- Sidebar -->
+    <div class="sidebar-fixed position-fixed">
+        <a class="logo-wrapper waves-effect">
+            <img alt="" class="img-fluid"
+                 id="logo" src="https://logos-download.com/wp-content/uploads/2016/10/Cerner_Corporation_logo.png">
+        </a>
+        <h5 style="text-align:center;">Mass Build Tool</h5><br>
+
+        <div class="list-group list-group-flush">
+            <button class="list-group-item active waves-effect button1" style="text-align:left;">
+                <i class="fas fa-gavel mr-3"></i>Mass Build
+            </button>
+            <button class="list-group-item waves-effect button2" style="text-align:left;">
+                <i class="fas fa-tasks mr-3"></i>Process Logs
+            </button>
+            <button class="list-group-item waves-effect button3" style="text-align:left;">
+
+                <i class="fas fa-window-maximize mr-3" style="text-align:left;"></i>Maven Logs
+            </button>
+            <button class="list-group-item waves-effect button4" style="text-align:left;">
+                <i class="fas fa-file mr-3"></i>Assembly Tests
+            </button>
+            <button class="list-group-item waves-effect button6" style="text-align:left;">
+                <i class="fas fa-reply mr-3"></i>Pull Request
+            </button>
+            <a class="button list-group-item waves-effect button5" href="help"
+               style="text-align:left;color:black;">
+                <i class="fas fa-info mr-3"></i>Help
+            </a>
+            <button class="list-group-item waves-effect modalButton" data-target="#centralModalLGInfoDemo"
+                    data-toggle="modal"
+                    style="text-align:left;display:none;">
+                <i class="fas fa-info mr-3"></i>Help
+            </button>
+            <a class="button list-group-item waves-effect" href="/logout"
+               style="text-align:left;color:black;">
+                <i class="fas fa-edit mr-3"></i>Logout
+            </a>
+        </div>
+
+    </div>
+    <!-- Sidebar -->
+
+</header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+        <!-- Heading -->
+        <div class="card mb-4 wow fadeIn">
+
+            <!--Card content-->
+            <div class="card-body justify-content-between">
+                <h5 style="color:red;text-align:center;"><b>{{thread_msg}}</b></h5>
+            </div>
+            <div class="card-body justify-content-between">
+                <h5>Progess Tracker</h5><br>
+
+                <div class="progress blue" style="margin-left:10px;margin-right:10px;">
+                    <div class="progress-bar" style="width:0%; background:#5fad56;"></div>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- Heading -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="centralModalLGInfoDemo"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading lead">Welcome</p>
+
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <i class="fas fa-check fa-4x mb-3 animated rotateIn"></i>
+                            <p>The tool helps to provide a framework which ease the process of mass build requirement
+                                for multiple java projects.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" href="help" role="button">Help</a>
+                        <a class="btn btn-success" data-dismiss="modal">Mass Build</a>
+                        <a class="btn btn-warning" data-dismiss="modal" onclick="func1(this);">Assembly Test</a>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+
+        <!--Grid row-->
+        <div class="row wow fadeIn">
+            <!--Grid column-->
+            <div class="col-md-7 mb-4">
+                <!--Card-->
+                <div class="card">
+                    <!--Card content-->
+                    <div class="card-body item1">
+                        <h5 style="text-align:center;">Mass Build</h5>
+                        <form action="" class="form-horizontal massbuild" method="POST">
+                            <div class="form-group">
+                                <label class="col-form-label" for="gitUrl" style="color: #1A4371;">GitHub URL<label
+                                        style="color:red;">*</label></label>
+
+                                <input class="form-control gitUrl" id="gitUrl" name="gitUrl"
+                                       placeholder="ex: https://github.cerner.com"
+                                       required type="text" value="https://github.cerner.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="gitRepoName" style="color: #1A4371;">GitHub
+                                    Repository Name<label style="color:red;">*</label></label>
+                                <input class="form-control gitRepoName" id="gitRepoName" name="gitRepoName"
+                                       placeholder="ex: physdoc"
+                                       required type="text" value="physdoc">
+                                <p id="RepoDoesnotExistMessage">GitHub repository does not exists!</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="branchName" style="color: #1A4371;">Branch
+                                    Name<label style="color:red;">*</label></label>
+                                <input class="form-control branchName" id="branchName" name="branchName"
+                                       placeholder="ex: dev"
+                                       required type="text" value="dev">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="workDirName" style="color: #1A4371;">Local Work
+                                    Directory
+                                    Name<label style="color:red;">*</label></label>
+
+                                <input class="form-control workDirName" id="workDirName" name="workDirName"
+                                       placeholder="ex: C:/git"
+
+                                       required type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="pomVersionName" style="color: #1A4371; "
+                                >POM Version
+                                    Name<label style="color:red;">*</label></label>
+
+                                <input class="form-control pomVersionName" id="pomVersionName"
+                                       name="pomVersionName"
+
+                                       placeholder="ex: DEV-SNAPSHOT" required type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="mavenGoals" style="color: #1A4371;">Maven
+                                    Goals<label style="color:red;">*</label></label>
+                                <input class="form-control mavenGoals" id="mavenGoals" name="mavenGoals"
+                                       placeholder="ex: mvn clean" required
+                                       type="text" value="mvn clean">
+                            </div>
+
+                            <input class="btn btn-success submitBuild" id="submitBuild"
+
+                                   type="submit"
+                                   value="Build"/>
+                        </form>
+                    </div>
+                    <div class="card-body item2" style="display:none;">
+                        <h5 style="text-align:center;">Realtime Process Logger</h5>
+                        <div class="message_holder" style="text-align:left;">
+                            <h6 id="logHead" style="color: #ebf14b;">No ongoing process!</h6>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body item2" style="display:none;">
+                        <h5 style="text-align:center;">Realtime maven build logs</h5>
+                        <textarea class="log_maven_data_holder" style="text-align:left;background: #cbcbcb;">
+                        </textarea><br><br>
+                        <input class="btn btn-success fetchMavenPrev" type="button" value="Prev" onclick="fetchMvnPrev(this);" style="display:none;">
+                        <input class="btn btn-success fetchMaven" type="button" value="Fetch Maven Logs" onclick="fetchMvnLog(this);">
+                        <input class="btn btn-success fetchMavenNext" type="button" value="Next" onclick="fetchMvnNext(this);" style="display:none;">
+
+                    </div>
+                    <div class="card-body item3" style="display:none;">
+                        <h5 style="text-align:center;">Mass Build History</h5>
+                        <div class="log_holder" style="text-align:left;background: #cbcbcb;">
+                        </div>
+                    </div>
+                    <div class="card-body item4" style="display:none;">
+                        <h5 style="text-align:center;">Mass Build Reactor Summary</h5>
+                        <textarea class="log_data_holder" style="text-align:left;background: #cbcbcb;">
+                        </textarea><br><br>
+                        <h5>Send Report via E-mail</h5><br>
+                        <label style="color:black;">Enter e-mail address of recipients<label style="color:red;"> [For
+                            multiple recipients seperate address using comma(,)]</label></label>
+                        <input class="form-control" id="mailAdd"/><br>
+                        <button class="btn btn-warning" onclick="mail(this);">Send Mail</button>
+                    </div>
+
+                    <div class="card-body item5" style="display:none;">
+                        <h5 style="text-align:center;">Assembly Tests</h5>
+                        <form action="" class="form-horizontal test" method="POST">
+                            <div class="form-group my-5 dropdown">
+                                <label class="col-form-label" for="testRemote" style="color: #1A4371;">Test
+                                    Remotely<label style="color:red;">*</label></label><br>
+                                <select class="testRemote" id="testRemote" name="jdk" required
+                                        style="width:50%;height:40px;">
+                                    <option value="true">true</option>
+                                    <option value="false">false</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="primaryDomain" style="color: #1A4371;">Primary
+                                    Domain<label style="color:red;">*</label></label>
+                                <input class="form-control primaryDomain" id="primaryDomain" name="primaryDomain"
+                                       placeholder="ex: solgm"
+                                       required type="text">
+                            </div>
+                            <input class="btn btn-success submitTest" id="submitTest" onclick="test(this);"
+                                   type="button"
+                                   value="Submit"/>
+                        </form>
+                    </div>
+                    <div class="card-body item6" style="display:none;">
+                        <h5 style="text-align:center;">Pull Request</h5>
+                        <form action="" class="form-horizontal pr" method="POST">
+                            <div class="form-group">
+                                <label class="col-form-label" for="reqTitle" style="color: #1A4371;">Request Title<label style="color:red;">*</label></label>
+                                <input class="form-control reqTitle" id="reqTitle" name="reqTitle"
+                                       placeholder="ex: Amazing new feature"
+                                       required type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="reqBody" style="color: #1A4371;">Request Body<label style="color:red;">*</label></label>
+                                <input class="form-control reqBody" id="reqBody" name="reqBody"
+                                       placeholder="ex: Pull Request"
+                                       required type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="reqHead" style="color: #1A4371;">Head Branch(Changes will be merged from this branch)<label style="color:red;">*</label></label>
+                                <input class="form-control reqHead" id="reqHead" name="reqHead"
+                                       placeholder="ex: temp-branch"
+                                       required type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="reqBase" style="color: #1A4371;">Base Branch(Changes will be merged to this branch)<label style="color:red;">*</label></label>
+                                <input class="form-control reqBase" id="reqBase" name="reqBase"
+                                       placeholder="ex: master"
+                                       required type="text">
+                            </div>
+                            <input class="btn btn-success submitPR" id="submitPR" onclick="pullRequest(this);"
+                                   type="button"
+                                   value="Submit"/>
+                        </form>
+                    </div>
+
+
+                </div>
+                <!--/.Card-->
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-md-5 mb-4 jdk">
+
+                <!--Card-->
+                <div class="card mb-4">
+
+                    <!-- Card header -->
+                    <div class="card-header text-center">
+                        Configure JDK and Maven Version
+                    </div>
+
+                    <!--Card content-->
+                    <div class="card-body">
+
+                        <form action="" class="form-horizontal changes" method="POST">
+                            <div class="form-group">
+                                <div class="dropdown my-5 d-flex justify-content-between mx-5 pb-none">
+                                    <label class="col-form-label" style="color: #1A4371;">JDK</label>
+
+                                    <select class="javaSelectOption" id="javaSelectOption" name="jdk"
+                                            style="width:60%;">
+
+                                        {% for item in java %}
+                                        <option id="a{{loop.index}}" value="{{item}}">{{item}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="dropdown my-5 d-flex justify-content-between mx-5 pb-none align-items-top">
+                                    <label class="col-form-label" style="color: #1A4371;">Maven-version</label>
+                                    <select class="mavenSelectOption" id="mavenSelectOption" name="maven"
+                                            style="width:60%;">
+                                        {% for item in maven %}
+                                        <option value="{{item}}">{{item}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="dropdown my-5 d-flex justify-content-between mx-5">
+                                    <label class="col-form-label" style="color: #1A4371;">Maven-Opts</label>
+                                    <input class="form-control mavenOpts" id="mavenOpts" name="mo"
+                                           placeholder="-Xms512m -Xmx2048m" value="-Xms512m -Xmx2048m"
+
+                                           style="width:60%;" type="text">
+
+                                </div>
+                                <button class="btn btn-success ml-5" id="submitConfigureJavaAndMaven" type="submit">
+                                    Apply Changes
+                                </button>
+                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-times-circle"></i>
+                                <p class="text-center" id="IncompatibleMavenMessage">incompatible maven</p>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+    </div>
+</main>
+<!--Main layout-->
+
+<!--Footer-->
+<footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
+
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+        © 2019 Copyright:
+        <a href="http://www.cerner.com/" target="_blank"> www.cerner.com </a>
+    </div>
+    <!--/.Copyright-->
+
+</footer>
+<!--/.Footer-->
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
+<!-- Bootstrap tooltips -->
+<script src="{{ url_for('static', filename='js/popper.min.js') }}" type="text/javascript"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" type="text/javascript"></script>
+<!-- MDB core JavaScript -->
+<script src="{{ url_for('static', filename='js/mdb.min.js') }}" type="text/javascript"></script>
+<!-- Initializations -->
+<script type="text/javascript">
+    // Animations initialization
+    new WOW().init();
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+</body>
+
+</html>
